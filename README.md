@@ -34,7 +34,10 @@ python3 -m http.server 8000
 
 ### 2. Customizing Configuration
 
-Edit `config.json` to customize your team's stand-up. The default configuration includes 5 participants with 2-minute slots:
+Click the "Edit Configuration" button at the bottom of the page to open the built-in config editor. You can:
+- Edit participants and times directly in the dialog
+- Click "Reset to Default" to restore the original config
+- Changes are automatically saved to localStorage
 
 **Simple Format (with default duration):**
 ```json
@@ -87,10 +90,18 @@ The configuration loads automatically when you open the app. Simply click **Star
 - **← Back**: Go back to the previous speaker at their last time (blue button below timer)
 - **+30s**: Add 30 seconds to the current speaker's time (teal button below timer)
 - **Next →**: Move to the next speaker immediately (yellow button below timer)
-- **Load Custom Config**: Load your own configuration file (at bottom of page)
+- **Edit Configuration**: Open the built-in config editor dialog (at bottom of page)
 - **Drag & Drop**: Click and drag any participant to reorder the queue
 
 ## Features Explained
+
+### Configuration Editor
+Click "Edit Configuration" at the bottom to open the built-in editor dialog:
+- **Live Editor**: Edit your config in JSON format with syntax highlighting
+- **Validation**: Automatic validation with helpful error messages
+- **Reset to Default**: One-click restore to original config
+- **Auto-save**: Changes are saved to localStorage automatically
+- **Preview**: Apply changes and see them immediately
 
 ### Dark Theme
 The app defaults to a clean, minimal dark theme designed for developers:

@@ -18,8 +18,13 @@ class StandupTimer {
     initializeElements() {
         this.elements = {
             themeToggle: document.getElementById('themeToggle'),
-            loadCustomBtn: document.getElementById('loadCustomBtn'),
-            configFile: document.getElementById('configFile'),
+            editConfigBtn: document.getElementById('editConfigBtn'),
+            configDialog: document.getElementById('configDialog'),
+            configEditor: document.getElementById('configEditor'),
+            closeDialogBtn: document.getElementById('closeDialogBtn'),
+            resetConfigBtn: document.getElementById('resetConfigBtn'),
+            cancelConfigBtn: document.getElementById('cancelConfigBtn'),
+            saveConfigBtn: document.getElementById('saveConfigBtn'),
             startBtn: document.getElementById('startBtn'),
             pauseBtn: document.getElementById('pauseBtn'),
             resetBtn: document.getElementById('resetBtn'),
@@ -62,16 +67,105 @@ class StandupTimer {
 
     attachEventListeners() {
         this.elements.themeToggle.addEventListener('click', () => this.toggleTheme());
-        this.elements.loadCustomBtn.addEventListener('click', () => {
-            this.elements.configFile.click();
-        });
-        this.elements.configFile.addEventListener('change', (e) => this.loadConfig(e));
+        this.elements.editConfigBtn.addEventListener('click', () => this.openConfigEditor());
+        this.elements.closeDialogBtn.addEventListener('click', () => this.closeConfigEditor());
+        this.elements.cancelConfigBtn.addEventListener('click', () => this.closeConfigEditor());
+        this.elements.resetConfigBtn.addEventListener('click', () => this.resetToDefaultConfig());
+        this.elements.saveConfigBtn.addEventListener('click', () => this.saveConfigFromEditor());
         this.elements.startBtn.addEventListener('click', () => this.start());
         this.elements.pauseBtn.addEventListener('click', () => this.togglePause());
         this.elements.resetBtn.addEventListener('click', () => this.reset());
         this.elements.backBtn.addEventListener('click', () => this.goBackToPrevious());
         this.elements.add30Btn.addEventListener('click', () => this.add30Seconds());
         this.elements.skipBtn.addEventListener('click', () => this.skipToNext());
+        
+        // Close dialog on Escape key
+        this.elements.configDialog.addEventListener('cancel', (e) => {
+            e.preventDefault();
+            this.closeConfigEditor();
+        });
+    }
+
+    openConfigEditor() {
+        // Get current config or default
+        const currentConfig = this.getCurrentConfigJSON();
+        this.elements.configEditor.value = currentConfig;
+        this.elements.configDialog.showModal();
+    }
+
+    closeConfigEditor() {
+        this.elements.configDialog.close();
+    }
+
+    getCurrentConfigJSON() {
+        if (this.config) {
+            // Get the raw config from localStorage or create from current config
+            const savedConfig = localStorage.getItem('lastConfig');
+            if (savedConfig) {
+                try {
+                    // Format it nicely
+                    const parsed = JSON.parse(savedConfig);
+                    return JSON.stringify(parsed, null, 2);
+                } catch (error) {
+                    console.error('Error parsing saved config:', error);
+                }
+            }
+        }
+        
+        // Default fallback
+        return JSON.stringify({
+            "defaultDuration": 120,
+            "participants": [
+                {"name": "Alice Johnson"},
+                {"name": "Bob Smith", "duration": 90},
+                {"name": "Charlie Davis"}
+            ]
+        }, null, 2);
+    }
+
+    async resetToDefaultConfig() {
+        try {
+            const response = await fetch('config.json');
+            if (!response.ok) {
+                throw new Error('Could not load default config file');
+            }
+            
+            const text = await response.text();
+            const parsed = JSON.parse(text);
+            this.elements.configEditor.value = JSON.stringify(parsed, null, 2);
+        } catch (error) {
+            alert('Error loading default config: ' + error.message);
+        }
+    }
+
+    saveConfigFromEditor() {
+        try {
+            const configText = this.elements.configEditor.value;
+            const parsedConfig = JSON.parse(configText);
+            
+            // Validate the config
+            this.config = parsedConfig;
+            if (!this.validateConfig()) {
+                alert('Invalid configuration format. Please check your JSON and ensure it has the required fields.');
+                return;
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('lastConfig', configText);
+            
+            // Apply the config
+            this.normalizeConfig();
+            this.reset();
+            this.updateUI();
+            this.elements.startBtn.disabled = false;
+            this.renderParticipantsList();
+            
+            // Close the dialog
+            this.closeConfigEditor();
+            
+        } catch (error) {
+            alert('Error parsing configuration: ' + error.message + '\n\nPlease check your JSON syntax.');
+        }
     }
 
     async loadDefaultConfig() {
