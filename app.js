@@ -23,6 +23,7 @@ class StandupTimer {
             configEditor: document.getElementById('configEditor'),
             closeDialogBtn: document.getElementById('closeDialogBtn'),
             resetConfigBtn: document.getElementById('resetConfigBtn'),
+            copyConfigBtn: document.getElementById('copyConfigBtn'),
             cancelConfigBtn: document.getElementById('cancelConfigBtn'),
             saveConfigBtn: document.getElementById('saveConfigBtn'),
             startBtn: document.getElementById('startBtn'),
@@ -71,6 +72,7 @@ class StandupTimer {
         this.elements.closeDialogBtn.addEventListener('click', () => this.closeConfigEditor());
         this.elements.cancelConfigBtn.addEventListener('click', () => this.closeConfigEditor());
         this.elements.resetConfigBtn.addEventListener('click', () => this.resetToDefaultConfig());
+        this.elements.copyConfigBtn.addEventListener('click', () => this.copyConfigToClipboard());
         this.elements.saveConfigBtn.addEventListener('click', () => this.saveConfigFromEditor());
         this.elements.startBtn.addEventListener('click', () => this.start());
         this.elements.pauseBtn.addEventListener('click', () => this.togglePause());
@@ -135,6 +137,30 @@ class StandupTimer {
             this.elements.configEditor.value = JSON.stringify(parsed, null, 2);
         } catch (error) {
             alert('Error loading default config: ' + error.message);
+        }
+    }
+
+    async copyConfigToClipboard() {
+        try {
+            const configText = this.elements.configEditor.value;
+            await navigator.clipboard.writeText(configText);
+            
+            // Visual feedback - change button text temporarily
+            const originalHTML = this.elements.copyConfigBtn.innerHTML;
+            this.elements.copyConfigBtn.innerHTML = `
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Copied!
+            `;
+            this.elements.copyConfigBtn.disabled = true;
+            
+            setTimeout(() => {
+                this.elements.copyConfigBtn.innerHTML = originalHTML;
+                this.elements.copyConfigBtn.disabled = false;
+            }, 2000);
+        } catch (error) {
+            alert('Failed to copy to clipboard: ' + error.message);
         }
     }
 
