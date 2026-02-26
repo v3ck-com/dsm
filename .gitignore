@@ -1,0 +1,13 @@
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Editor directories
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Local config files (optional - user can override)
+*.local.json

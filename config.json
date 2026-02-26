@@ -1,0 +1,22 @@
+{
+  "defaultDuration": 120,
+  "participants": [
+    {
+      "name": "Alice Johnson"
+    },
+    {
+      "name": "Bob Smith",
+      "duration": 90
+    },
+    {
+      "name": "Charlie Davis"
+    },
+    {
+      "name": "Diana Martinez",
+      "duration": 60
+    },
+    {
+      "name": "Ethan Wilson"
+    }
+  ]
+}

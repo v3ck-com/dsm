@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Stand-up Timer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-top">
+                <h1>Daily Stand-up</h1>
+                <button id="themeToggle" class="theme-toggle" title="Toggle theme">
+                    <span class="theme-icon">☀️</span>
+                </button>
+            </div>
+            <div class="controls">
+                <button id="startBtn" disabled>Start</button>
+                <button id="pauseBtn" disabled>Pause</button>
+                <button id="resetBtn" disabled>Reset</button>
+            </div>
+        </header>
+
+        <main>
+            <div class="current-speaker">
+                <div class="speaker-name" id="currentSpeaker">Loading...</div>
+                <div class="timer-display" id="timerDisplay">00:00</div>
+                <div class="timer-controls">
+                    <button id="backBtn" class="timer-control-btn" disabled title="Go back to previous speaker">
+                        ← Back
+                    </button>
+                    <button id="add30Btn" class="timer-control-btn" disabled title="Add 30 seconds">
+                        +30s
+                    </button>
+                    <button id="skipBtn" class="timer-control-btn" disabled title="Next speaker">
+                        Next →
+                    </button>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+
+            <div class="next-speaker" id="nextSpeaker">
+                <span class="label">Up Next:</span>
+                <span class="name" id="nextName">-</span>
+            </div>
+
+            <div class="participants-list">
+                <h2>Queue</h2>
+                <ul id="participantsList"></ul>
+            </div>
+
+            <div class="stats">
+                <div class="stat">
+                    <span class="stat-label">Current:</span>
+                    <span class="stat-value" id="currentIndex">-</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Remaining:</span>
+                    <span class="stat-value" id="remainingCount">-</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Total Time:</span>
+                    <span class="stat-value" id="totalTime">-</span>
+                </div>
+            </div>
+
+            <div class="custom-config-section">
+                <button id="loadCustomBtn" class="small-button">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    Load Custom Config
+                </button>
+                <input type="file" id="configFile" accept=".json" style="display: none;">
+            </div>
+
+            <div class="footer">
+                <a href="https://www.buymeacoffee.com/yourusername" target="_blank" rel="noopener noreferrer" class="coffee-link">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                        <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                        <line x1="6" y1="1" x2="6" y2="4"></line>
+                        <line x1="10" y1="1" x2="10" y2="4"></line>
+                        <line x1="14" y1="1" x2="14" y2="4"></line>
+                    </svg>
+                    Buy me a coffee
+                </a>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
